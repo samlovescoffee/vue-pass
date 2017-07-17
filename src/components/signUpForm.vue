@@ -2,9 +2,9 @@
 <template>
     <form id="access" style={{ formStyle }} onSubmit={{ handleSubmit }}>
         <legend><h1>{{ title }}</h1></legend>
-        <Input id="username" name="username" type="text" text="User Name"/>
-        <Input id="email" name='email' type='email' text="Email"/>
-        <Input id="password" name='password' type='password' value='123QWEqwe@' text="Password"/>
+        <input id="username" name="username" type="text" text="User Name"/>
+        <input id="email" name='email' type='email' text="Email"/>
+        <input id="password" name='password' type='password' value='123QWEqwe@' text="Password"/>
 
         <button click={{ onSubmit }} value="Go">Submit</button>
     </form>
@@ -12,8 +12,6 @@
 
 <script>
 
-
-import Input from './input';
 import axios from 'axios';
 
 let querystring = require('querystring');

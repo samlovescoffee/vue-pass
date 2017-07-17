@@ -1,5 +1,5 @@
 <template>
-    <label><span style={{ spanStyle }} >{{ text }}</span><input name={{ name }} type={{ type }} value={{ value }} style={{ inputStyle }}/></label>
+    <label><span style={{ spanStyle }} ></span><input name= type= value= style={{ inputStyle }}/></label>
 </template>
 
 let spanStyle = {
