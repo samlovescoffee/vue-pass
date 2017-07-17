@@ -47,7 +47,7 @@ router.route('/users')
 	// handle user sign in/sign up
 	users.find({'Email': req.body.email}, function(err, data) {
 		if (err) {
-			Log.error(err);
+			Log.error(err, ' this is here');
 
 		} else if (data.length === 0) {
 			User.create(req);

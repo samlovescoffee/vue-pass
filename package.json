@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "axios": "^0.16.2",
+    "body-parser": "^1.17.2",
+    "mongoose": "^4.11.3",
+    "password-hash": "^1.2.2",
     "vue": "^2.3.3",
     "vue-router": "^2.6.0"
   },
