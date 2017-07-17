@@ -1,16 +1,17 @@
 
 <template>
-    <form id="access" style={{ formStyle }} onSubmit={{ handleSubmit }}>
+    <form id="access" onSubmit='handleSubmit()'>
         <legend><h1>{{ title }}</h1></legend>
         <input id="username" name="username" type="text" text="User Name"/>
         <input id="email" name='email' type='email' text="Email"/>
         <input id="password" name='password' type='password' value='123QWEqwe@' text="Password"/>
 
-        <button click={{ onSubmit }} value="Go">Submit</button>
+        <button value="Go">Submit</button>
     </form>
 </template>
 
 <script>
+
 
 import axios from 'axios';
 
