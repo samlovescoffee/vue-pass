@@ -26,10 +26,6 @@ import axios from 'axios';
 let querystring = require('querystring');
 let Cookie = require('../controllers/cookies');
 
-
-let data = {};
-let userData;
-
 export default {
   	name: 'signUpForm',
   	data () {
@@ -40,6 +36,9 @@ export default {
   	methods: {
 		submit: function handleSubmit(e) {
 			e.preventDefault();
+
+			let data = {};
+			let userData;
 
 			let inputs = document.getElementsByTagName('INPUT');
 
@@ -59,7 +58,7 @@ export default {
 
 			if (validateEmail(data.email) && validatePassword(data.password)) {
 
-				axios.post('http://localhost:3001/api/users', JSON.stringify(data),
+				axios.post('http://localhost:3001/api/users', querystring.stringify(data),
 					{headers: {"Content-Type": "application/x-www-form-urlencoded"}},)
 					.then(function(res) {
 						Cookie.write('JWT', res.data, 2);

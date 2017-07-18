@@ -6,6 +6,7 @@ const user = {
 	create: function createNewUser(req) {
 				let user = new User();
 				user.Email = req.body.email;
+				console.log(req.body.password);
 				user.Password = passwordHash.generate(req.body.password);
 				user.CreatedDate = new Date();
 				user.Username = req.body.username;
