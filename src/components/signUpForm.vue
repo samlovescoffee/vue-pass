@@ -3,15 +3,15 @@
     <form id="access">
         <legend><h1>{{ title }}</h1></legend>
 		<label><span>User name</span>
-        	<input id="username" name="username" type="text" text="User Name"/>
+        	<input id="username" v-model='inputData.username' name="username" type="text" text="User Name"/>
 		</label>
 
 		<label><span>Email</span>
-        	<input id="email" name='email' type='email' text="Email"/>
+        	<input id="email" v-model='inputData.email' name='email' type='email' text="Email"/>
 		</label>
 
 		<label><span>Password</span>
-        	<input id="password" name='password' type='password' value='123QWEqwe@' text="Password"/>
+        	<input id="password" v-model='inputData.password' name='password' type='password' value='123QWEqwe@' text="Password"/>
 		</label>
 
         <button v-on:click='submit' value="Go">Submit</button>
@@ -30,21 +30,17 @@ export default {
   	name: 'signUpForm',
   	data () {
     	return {
-      		title: 'Sign Up'
+      		title: 'Sign Up',
+			inputData: {
+				username: '',
+				email: '',
+				password: '',
+			}
     	}
   	},
   	methods: {
 		submit: function handleSubmit(e) {
 			e.preventDefault();
-
-			let data = {};
-			let userData;
-
-			let inputs = document.getElementsByTagName('INPUT');
-
-			for (let i = 0; i < inputs.length; i++){
-				data[inputs[i].getAttribute('name')] = inputs[i].value;
-			}
 
 			const validateEmail = (email) => {
 				let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -56,9 +52,9 @@ export default {
 				return re.test(password);
 			};
 
-			if (validateEmail(data.email) && validatePassword(data.password)) {
+			if (validateEmail(this.formData.email) && validatePassword(this.formData.password)) {
 
-				axios.post('http://localhost:3001/api/users', querystring.stringify(data),
+				axios.post('http://localhost:3001/api/users', querystring.stringify(this.formData),
 					{headers: {"Content-Type": "application/x-www-form-urlencoded"}},)
 					.then(function(res) {
 						Cookie.write('JWT', res.data, 2);
@@ -74,6 +70,11 @@ export default {
 			} else if (!validatePassword(data.password)) {
 				alert('Password must be 8 characters, numbers and include upper and lower case letters');
 			}
+		}
+	},
+	computed: {
+		formData: function() {
+			return {username: this.inputData.username, email: this.inputData.email, password: this.inputData.password};
 		}
 	}
 }
