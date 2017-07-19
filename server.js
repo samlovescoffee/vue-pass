@@ -26,7 +26,7 @@ app.use(function(req, res, next) {
 	next();
 });
 
-mongoose.connect('mongodb://localhost/react-pass');
+mongoose.connect('mongodb://localhost/vue-pass');
 
 router.get('/', function(req, res) {
 	res.json({ message: 'API Initialized!'});
@@ -47,10 +47,14 @@ router.route('/users')
 	// handle user sign in/sign up
 	users.find({'Email': req.body.email}, function(err, data) {
 		if (err) {
-			Log.error(err, ' this is here');
+			Log.error(err);
 
 		} else if (data.length === 0) {
-			User.create(req);
+			if (User.validatePassword(req.body.password)) {
+				User.create(req);
+			} else {
+				let dangerousReqest = 'User with email: ' + data[0].Email + ' made a User post request without form validation';
+			}
 
 		} else if (passwordHash.verify(req.body.password, data[0].Password)) {
 			Log.audit(req.body.email, 'Successful log in request');
@@ -59,5 +63,10 @@ router.route('/users')
 		} else {
 			Log.audit(req.body.email, 'Unsuccessful log in');
 		}
+
+	if (dangerousReqest) {
+		Log.error(dangerousReqest);
+	}
+	
 	});
 });

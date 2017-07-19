@@ -52,7 +52,7 @@ export default {
 				return re.test(password);
 			};
 
-			if (validateEmail(this.formData.email) && validatePassword(this.formData.password)) {
+			if (validateEmail(this.formData.email)) {
 
 				axios.post('http://localhost:3001/api/users', querystring.stringify(this.formData),
 					{headers: {"Content-Type": "application/x-www-form-urlencoded"}},)
