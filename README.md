@@ -8,6 +8,10 @@
 # install dependencies
 npm install - currently need to install some dependencies manually, check the package.json
 
+# install mongodb
+
+Docs available <a href='https://docs.mongodb.com/manual/installation/'>here</a>
+
 # serve with hot reload at localhost:8080
 npm run start
 
