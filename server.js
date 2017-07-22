@@ -50,10 +50,11 @@ router.route('/users')
 			Log.error(err);
 
 		} else if (data.length === 0) {
-			if (User.validatePassword(req.body.password)) {
+			if (User.validatePassword(req.body.password) && User.validateEmail(req.body.email)) {
 				User.create(req);
 			} else {
-				let dangerousReqest = 'User with email: ' + data[0].Email + ' made a User post request without form validation';
+				let dangerousRequest = 'User with email: ' + req.body.email + ' made a User post request without form validation';
+				Log.error(dangerousRequest);
 			}
 
 		} else if (passwordHash.verify(req.body.password, data[0].Password)) {
@@ -64,8 +65,8 @@ router.route('/users')
 			Log.audit(req.body.email, 'Unsuccessful log in');
 		}
 
-	if (dangerousReqest) {
-		Log.error(dangerousReqest);
+	if (typeof dangerousRequest != 'undefined') {
+		Log.error(dangerousRequest);
 	}
 	
 	});

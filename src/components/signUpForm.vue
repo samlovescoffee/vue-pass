@@ -52,7 +52,7 @@ export default {
 				return re.test(password);
 			};
 
-			if (validateEmail(this.formData.email)) {
+			if (validateEmail(this.formData.email) && validatePassword(this.formData.password)) {
 
 				axios.post('http://localhost:3001/api/users', querystring.stringify(this.formData),
 					{headers: {"Content-Type": "application/x-www-form-urlencoded"}},)
@@ -65,9 +65,9 @@ export default {
 						console.log('whopper ', error);
 					});
 
-			} else if (!validateEmail(data.email)) {
+			} else if (!validateEmail(this.formData.email)) {
 				alert('Invalid email address');
-			} else if (!validatePassword(data.password)) {
+			} else if (!validatePassword(this.formData.password)) {
 				alert('Password must be 8 characters, numbers and include upper and lower case letters');
 			}
 		}
