@@ -1,15 +1,15 @@
 # vue-pass
 
-> A Vue.js project
+> A mongo, express, vue, node project, featuring custom validation and error logging.
 
 ## Build Setup
 
 ``` bash
 # install dependencies
-npm install
+npm install - currently need to install some dependencies manually, check the package.json
 
 # serve with hot reload at localhost:8080
-npm run dev
+npm run start
 
 # build for production with minification
 npm run build
@@ -18,4 +18,4 @@ npm run build
 npm run build --report
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+Currently this points to a mongodb with the name of vue-pass, make sure you're using it, or change it in the server.js @ change this to your db
