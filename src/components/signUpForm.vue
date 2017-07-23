@@ -22,6 +22,7 @@
 
 
 import axios from 'axios';
+import Router from 'vue-router'
 
 let querystring = require('querystring');
 let Cookie = require('../controllers/cookies');
@@ -42,12 +43,12 @@ export default {
 		submit: function handleSubmit(e) {
 			e.preventDefault();
 
-			const validateEmail = (email) => {
+			function validateEmail(email) {
 				let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 				return re.test(email);
 			};
 
-			const validatePassword = (password) => {
+			function validatePassword(password) {
 				let re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
 				return re.test(password);
 			};
@@ -57,12 +58,13 @@ export default {
 				axios.post('http://localhost:3001/api/users', querystring.stringify(this.formData),
 					{headers: {"Content-Type": "application/x-www-form-urlencoded"}},)
 					.then(function(res) {
-						Cookie.write('JWT', res.data, 2);
-						let cookie = Cookie.read('JWT').split(':sha');
-						userData = JSON.parse(cookie[0]);
+
+						//TODO: Use the JWT node package
+
+						this.Router.push('/account');
 					})
 					.catch(function (error) {
-						console.log('whopper ', error);
+						console.log(error);
 					});
 
 			} else if (!validateEmail(this.formData.email)) {
