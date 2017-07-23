@@ -1,5 +1,3 @@
 <script>
-export default {
-    debug: true
-}
+window.debug = true;
 </script>
