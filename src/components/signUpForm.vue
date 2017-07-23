@@ -1,21 +1,23 @@
 
 <template>
-    <form id="access">
-        <legend><h1>{{ title }}</h1></legend>
-		<label><span>User name</span>
-        	<input id="username" v-model='inputData.username' name="username" type="text" text="User Name"/>
-		</label>
+	<div class='row'>
+		<form id="access">
+			<legend><h1>{{ title }}</h1></legend>
+			<label><span>User name</span>
+				<input id="username" v-model='inputData.username' name="username" type="text" text="User Name"/>
+			</label>
 
-		<label><span>Email</span>
-        	<input id="email" v-model='inputData.email' name='email' type='email' text="Email"/>
-		</label>
+			<label><span>Email</span>
+				<input id="email" v-model='inputData.email' name='email' type='email' text="Email"/>
+			</label>
 
-		<label><span>Password</span>
-        	<input id="password" v-model='inputData.password' name='password' type='password' value='123QWEqwe@' text="Password"/>
-		</label>
+			<label><span>Password</span>
+				<input id="password" v-model='inputData.password' name='password' type='password' value='123QWEqwe@' text="Password"/>
+			</label>
 
-        <button v-on:click='submit' value="Go">Submit</button>
-    </form>
+			<button v-on:click='submit' value="Go">Submit</button>
+		</form>
+	</div>
 </template>
 
 <script>
@@ -51,7 +53,7 @@ export default {
 				return re.test(password);
 			};
 
-			// presever this to access $router
+			// preserve this to access $router
 			let self = this;
 			if (validateEmail(this.formData.email) && validatePassword(this.formData.password)) {
 
@@ -70,7 +72,6 @@ export default {
 			} else if (!validatePassword(this.formData.password)) {
 				alert('Password must be 8 characters, numbers and include upper and lower case letters');
 			}
-			//this.$router.push('/account');
 		}
 	},
 	computed: {
@@ -85,8 +86,8 @@ export default {
 <style scoped>
 	form {
 		padding: 50px;
-		width: 250px;
-		min-width: 25%;
+		width: 450px;
+		max-width: 90% !important;
 		margin: auto;
 		margin-top: 200px;
 		box-shadow: 0px 0px 10px -2px;
