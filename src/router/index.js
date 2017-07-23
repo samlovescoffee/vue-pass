@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import signUp from '@/components/signUp'
-import test from '@/components/test'
+import account from '@/components/account'
 
 Vue.use(Router)
+
+const DEBUG = true;
 
 export default new Router({
   routes: [
@@ -13,9 +15,9 @@ export default new Router({
       component: signUp
     },
     {
-      path: '/test',
-      name: 'test',
-      component: test
+      path: '/account',
+      name: 'account',
+      component: account
     }
   ]
 })

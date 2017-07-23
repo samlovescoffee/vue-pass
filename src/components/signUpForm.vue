@@ -19,50 +19,50 @@
 </template>
 
 <script>
-
-
 import axios from 'axios';
+import Router from 'vue-router';
 
 let querystring = require('querystring');
 let Cookie = require('../controllers/cookies');
 
 export default {
   	name: 'signUpForm',
-  	data () {
-    	return {
-      		title: 'Sign Up',
+	data () {
+		return {
+			title: 'Sign Up',
 			inputData: {
-				username: '',
-				email: '',
-				password: '',
+				username: window.debug ? "sam" : "",
+				email: window.debug ? "sam@google.com" : "",
+				password: window.debug ? "123qweQWE@" : "",
 			}
-    	}
-  	},
+		}
+	},
   	methods: {
 		submit: function handleSubmit(e) {
 			e.preventDefault();
 
-			const validateEmail = (email) => {
+			function validateEmail(email) {
 				let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 				return re.test(email);
 			};
 
-			const validatePassword = (password) => {
+			function validatePassword(password) {
 				let re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
 				return re.test(password);
 			};
 
+			// presever this to access $router
+			let self = this;
 			if (validateEmail(this.formData.email) && validatePassword(this.formData.password)) {
 
 				axios.post('http://localhost:3001/api/users', querystring.stringify(this.formData),
 					{headers: {"Content-Type": "application/x-www-form-urlencoded"}},)
 					.then(function(res) {
-						Cookie.write('JWT', res.data, 2);
-						let cookie = Cookie.read('JWT').split(':sha');
-						userData = JSON.parse(cookie[0]);
+						//TODO: Use the JWT node package
+						self.$router.push('/account');
 					})
 					.catch(function (error) {
-						console.log('whopper ', error);
+						console.log(error);
 					});
 
 			} else if (!validateEmail(this.formData.email)) {
@@ -70,6 +70,7 @@ export default {
 			} else if (!validatePassword(this.formData.password)) {
 				alert('Password must be 8 characters, numbers and include upper and lower case letters');
 			}
+			//this.$router.push('/account');
 		}
 	},
 	computed: {

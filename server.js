@@ -26,6 +26,7 @@ app.use(function(req, res, next) {
 	next();
 });
 
+// change this to your db
 mongoose.connect('mongodb://localhost/vue-pass');
 
 router.get('/', function(req, res) {
