@@ -22,23 +22,24 @@
 
 
 import axios from 'axios';
-import Router from 'vue-router'
+import Router from 'vue-router';
+import config from '../../config';
 
 let querystring = require('querystring');
 let Cookie = require('../controllers/cookies');
 
 export default {
   	name: 'signUpForm',
-  	data () {
-    	return {
-      		title: 'Sign Up',
+	data () {
+		return {
+			title: 'Sign Up',
 			inputData: {
-				username: '',
-				email: '',
-				password: '',
+				username: config.DEBUG ? "sam" : "",
+				email: config.DEBUG ? "sam@google.com" : "",
+				password: config.DEBUG ? "123qweQWE@" : "",
 			}
-    	}
-  	},
+		}
+	},
   	methods: {
 		submit: function handleSubmit(e) {
 			e.preventDefault();

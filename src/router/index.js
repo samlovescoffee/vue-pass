@@ -5,6 +5,8 @@ import account from '@/components/account'
 
 Vue.use(Router)
 
+const DEBUG = true;
+
 export default new Router({
   routes: [
     {
