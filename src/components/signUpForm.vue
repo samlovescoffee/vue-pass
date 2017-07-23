@@ -25,6 +25,8 @@ import axios from 'axios';
 import Router from 'vue-router';
 import config from '../../config';
 
+console.log(config.debug);
+
 let querystring = require('querystring');
 let Cookie = require('../controllers/cookies');
 
@@ -34,9 +36,9 @@ export default {
 		return {
 			title: 'Sign Up',
 			inputData: {
-				username: config.DEBUG ? "sam" : "",
-				email: config.DEBUG ? "sam@google.com" : "",
-				password: config.DEBUG ? "123qweQWE@" : "",
+				username: config.debug ? "sam" : "",
+				email: config.debug ? "sam@google.com" : "",
+				password: config.debug ? "123qweQWE@" : "",
 			}
 		}
 	},
