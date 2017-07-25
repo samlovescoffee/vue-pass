@@ -4,17 +4,52 @@
 			<li><router-link to="/">Home</router-link></li>
 			<li><router-link to="/account">Account</router-link></li>
 		</ul>
+		<div class='searchWrapper'>
+			<form>
+				<input id="username" v-model='inputData.username' name="username" type="text" text="User Name"/>
+				<button v-on:click='submit' value="Go">Search</button>
+			</form>
+		</div>
 	</div>
 </template>
 
 <script>
-//import signUpForm from '@/components/signUpForm'
+
+import axios from 'axios';
+import Router from 'vue-router';
+
+let querystring = require('querystring');
+let Cookie = require('../controllers/cookies');
 
 export default {
-  name: 'desktopHeader',
-  components: {
-    //signUpForm
-  }
+  	name: 'desktopHeader',
+  	data () {
+		return {
+			inputData: {
+				username: window.debug ? "test" : "",
+			}
+		}
+	},
+	methods: {
+		submit: function handleSubmit(e) {
+			e.preventDefault();
+
+			axios.post('http://localhost:3001/api/userSearch', querystring.stringify(this.formData),
+				{headers: {"Content-Type": "application/x-www-form-urlencoded"}},)
+				.then(function(res) {
+					//TODO: Use the JWT node package
+					console.log(res);
+				})
+				.catch(function (error) {
+					console.log(error);
+				});
+		}
+	},
+	computed: {
+		formData: function() {
+			return {username: this.inputData.username};
+		}
+	}
 }
 </script>
 

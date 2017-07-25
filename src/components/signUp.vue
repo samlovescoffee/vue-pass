@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<desktopHeader></desktopHeader>
 		<signUpForm></signUpForm>
 	</div>
 
@@ -18,7 +17,6 @@ export default {
     }
   }, 
   components: {
-    desktopHeader,
     signUpForm
   }
 }

@@ -1,6 +1,8 @@
 let User = require('../model/users');
 let passwordHash = require('password-hash');
 let Log = require('./logs');
+const mongoose = require('mongoose');
+let users = mongoose.model('User','users');
 
 const user = {
 	create: function createNewUser(req) {
@@ -24,6 +26,18 @@ const user = {
 					Log.audit(user.Email, 'New user created');
 				}
 			});
+	},
+
+	find: function findUser(searchTerm) {
+		users.find({'Username': new RegExp(searchTerm)}, function(err, data) {
+			if (!data.length === 0) {
+				console.log(data);
+				return data;
+			} else {
+				console.log('no data');
+				return false;
+			}
+		});
 	},
 
 	validatePassword: function checkPasswordRegex(password) {

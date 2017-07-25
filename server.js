@@ -60,15 +60,19 @@ router.route('/users')
 
 		} else if (passwordHash.verify(req.body.password, data[0].Password)) {
 			Log.audit(req.body.email, 'Successful log in request');
-			res.send('{ "user": "' + data[0].Email + '", "access": "' + data[0].Access + '", "username": "' + data[0].Username + '" }:' + passwordHash.generate('{ "user": "' + data[0].Email + '", "access": "' + data[0].Access + '", "username": "' + data[0].Username + '" }'));
-
 		} else {
 			Log.audit(req.body.email, 'Unsuccessful log in');
 		}
 
-	if (typeof dangerousRequest != 'undefined') {
-		Log.error(dangerousRequest);
-	}
+		if (typeof dangerousRequest != 'undefined') {
+			Log.error(dangerousRequest);
+		}
 	
 	});
+});
+
+router.route('/userSearch')
+.post(function(req, res) {
+	let result = User.find(req.body.username);
+	res.send(result);
 });
