@@ -28,11 +28,11 @@ const user = {
 			});
 	},
 
-	find: function findUser(searchTerm) {
-		users.find({'Username': new RegExp(searchTerm)}, function(err, data) {
-			if (!data.length === 0) {
-				console.log(data);
-				return data;
+	find: function finder(col, searchTerm) {
+		console.log(typeof col); // so this = 'Email', but doesn't work, but replacing it with 'Email' works.
+		users.find({col: searchTerm}, function(err, data) {
+			if (data) {
+				return data[0].Username;
 			} else {
 				console.log('no data');
 				return false;

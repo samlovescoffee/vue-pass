@@ -1,12 +1,12 @@
 <template>
-	<div class='row'>
+	<div>
 		<ul>
 			<li><router-link to="/">Home</router-link></li>
 			<li><router-link to="/account">Account</router-link></li>
 		</ul>
 		<div class='searchWrapper'>
 			<form>
-				<input id="username" v-model='inputData.username' name="username" type="text" text="User Name"/>
+				<input id="searchTerm" v-model='inputData.searchTerm' name="searchTerm" type="text" text="User Name"/>
 				<button v-on:click='submit' value="Go">Search</button>
 			</form>
 		</div>
@@ -26,7 +26,7 @@ export default {
   	data () {
 		return {
 			inputData: {
-				username: window.debug ? "test" : "",
+				searchTerm: window.debug ? "sam@google.com" : "",
 			}
 		}
 	},
@@ -47,11 +47,18 @@ export default {
 	},
 	computed: {
 		formData: function() {
-			return {username: this.inputData.username};
+			return {searchTerm: this.inputData.searchTerm};
 		}
 	}
 }
 </script>
+
+<style>
+	ul {
+		padding-left: 0;
+		list-style-type: none;
+	}
+</style>
 
 <style>
 	.container {

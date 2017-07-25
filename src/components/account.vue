@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class='row'>
 		<desktopHeader></desktopHeader>
 		<h1>This is the account</h1>
 	</div>
