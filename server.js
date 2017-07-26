@@ -73,5 +73,5 @@ router.route('/users')
 
 router.route('/userSearch')
 .post(function(req, res) {
-	res.send(User.find('Email', req.body.searchTerm));
+	res.send(User.find("Email", req.body.searchTerm));
 });

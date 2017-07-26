@@ -29,9 +29,8 @@ const user = {
 	},
 
 	find: function finder(col, searchTerm) {
-		console.log(typeof col); // so this = 'Email', but doesn't work, but replacing it with 'Email' works.
-		users.find({col: searchTerm}, function(err, data) {
-			if (data) {
+		users.find({ [col]: searchTerm }, function(err, data) {
+			if (data[0]) {
 				return data[0].Username;
 			} else {
 				console.log('no data');
