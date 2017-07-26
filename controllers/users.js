@@ -8,7 +8,6 @@ const user = {
 	create: function createNewUser(req) {
 			let user = new User();
 			user.Email = req.body.email;
-			console.log(req.body.password);
 			user.Password = passwordHash.generate(req.body.password);
 			user.CreatedDate = new Date();
 			user.Username = req.body.username;
@@ -28,13 +27,19 @@ const user = {
 			});
 	},
 
-	find: function finder(col, searchTerm) {
+	find: function finder(col, searchTerm, res) {
 		users.find({ [col]: searchTerm }, function(err, data) {
-			if (data[0]) {
-				return data[0].Username;
+			if(err) {
+				Log.error(err);
 			} else {
-				console.log('no data');
-				return false;
+				return new Promise ((resolve, reject) => {
+					let userStore = {};
+					for(let i = 0; i < data.length; i++) {
+						let name = data[i]['_doc']['_id'];
+						userStore[name] = data[i]['_doc'];
+					}
+					resolve(res.send(userStore));
+				});
 			}
 		});
 	},

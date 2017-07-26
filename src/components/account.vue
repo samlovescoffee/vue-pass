@@ -1,18 +1,18 @@
 <template>
 	<div class='row'>
-		<desktopHeader></desktopHeader>
+		<searchUsers></searchUsers>
 		<h1>This is the account</h1>
 	</div>
 
 </template>
 
 <script>
-import desktopHeader from '@/components/header'
+import searchUsers from '@/components/searchUsers'
 
 export default {
   name: 'account', 
   components: {
-    desktopHeader
+    searchUsers
   }
 }
 </script>
