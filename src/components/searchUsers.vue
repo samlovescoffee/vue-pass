@@ -48,10 +48,11 @@ export default {
 				.then(function(res) {
 					//TODO: Use the JWT node package
 					self.resultData.count = Object.keys(res.data).length;
+					let userArr = [];
 					for(let i = 0; i < Object.values(res.data).length; i++) {
-						self.resultData.content.push(Object.values(res.data)[i].Email);
+						userArr.push(Object.values(res.data)[i].Email);
 					}
-					console.log(res);
+					self.resultData.content = userArr;
 				})
 				.catch(function (error) {
 					console.log(error);
