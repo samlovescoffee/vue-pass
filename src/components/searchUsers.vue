@@ -6,6 +6,14 @@
 				<button v-on:click='submit' value="Go">Search</button>
 			</form>
 		</div>
+		<div class='searchResults'>
+			<p>{{ resultData.count }}</p>
+			<ul>
+				<li v-for="user in resultData.content">
+					{{ user }}
+				</li>
+			</ul>
+		</div>
 	</div>
 </template>
 
@@ -22,18 +30,27 @@ export default {
   	data () {
 		return {
 			inputData: {
-				searchTerm: window.debug ? "sam@google.com" : "",
+				searchTerm: window.debug ? "sam" : "",
+			},
+			resultData: {
+				count: 'No results',
+				content: []
 			}
 		}
 	},
 	methods: {
 		submit: function handleSubmit(e) {
 			e.preventDefault();
+			let self = this;
 
 			axios.post('http://localhost:3001/api/userSearch', querystring.stringify(this.formData),
 				{headers: {"Content-Type": "application/x-www-form-urlencoded"}},)
 				.then(function(res) {
 					//TODO: Use the JWT node package
+					self.resultData.count = Object.keys(res.data).length;
+					for(let i = 0; i < Object.values(res.data).length; i++) {
+						self.resultData.content.push(Object.values(res.data)[i].Email);
+					}
 					console.log(res);
 				})
 				.catch(function (error) {

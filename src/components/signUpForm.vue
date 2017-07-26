@@ -64,7 +64,14 @@ export default {
 						self.$router.push('/account');
 					})
 					.catch(function (error) {
-						console.log(error);
+						switch (error.response.status) {
+							case 401:
+								alert('Incorrect Credentials');
+								break;
+							default:
+								console.log(error);
+								break;
+						}
 					});
 
 			} else if (!validateEmail(this.formData.email)) {

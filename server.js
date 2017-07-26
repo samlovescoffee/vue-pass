@@ -60,9 +60,10 @@ router.route('/users')
 
 		} else if (passwordHash.verify(req.body.password, data[0].Password)) {
 			Log.audit(req.body.email, 'Successful log in request');
-			res.end();
+			res.status(200).end();
 		} else {
 			Log.audit(req.body.email, 'Unsuccessful log in');
+			res.status(401).end();
 		}
 
 		if (typeof dangerousRequest != 'undefined') {
