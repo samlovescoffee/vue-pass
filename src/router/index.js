@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import signUp from '@/components/signUp'
-import search from '@/components/search'
+import signUp from './signUp'
+import search from './search'
 
 Vue.use(Router)
 
