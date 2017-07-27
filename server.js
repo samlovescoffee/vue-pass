@@ -4,8 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
-const router = express.Router();
-const port = process.env.API_PORT || 3001;
+const API = express.Router();
 let User = require('./controllers/users');
 
 //now we should configure the API to use bodyParser and look for JSON data in the request body
@@ -26,23 +25,19 @@ app.use(function(req, res, next) {
 // change this to your db
 mongoose.connect('mongodb://localhost/vue-pass');
 
-router.get('/', function(req, res) {
-	res.json({ message: 'API Initialized!'});
+app.use('/api', API);
+
+app.listen(3001, function() {
+	console.log('api running');
 });
 
-app.use('/api', router);
-
-app.listen(port, function() {
-	console.log('api running on port ', port);
-});
-
-router.route('/users')
+API.route('/users')
 .post(function(req, res) {
 	// handle user sign in/sign up
 	User.validate(req, res);
 });
 
-router.route('/userSearch')
+API.route('/userSearch')
 .post(function(req, res) {
 	User.find("Username", req.body.searchTerm, res);
 });
