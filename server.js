@@ -33,12 +33,7 @@ app.listen(3001, function() {
 });
 
 API.route('/users')
-.post(function(req, res) {
-	// handle user sign in/sign up
-	User.validate(req, res);
-});
+.post((req, res) => User.validate(req, res));
 
 API.route('/userSearch')
-.post(function(req, res) {
-	User.find("Username", req.body.searchTerm, res);
-});
+.post((req, res) => User.find("Username", req.body.searchTerm, res));
