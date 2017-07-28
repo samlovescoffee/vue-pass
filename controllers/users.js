@@ -13,10 +13,10 @@ const user = {
 			user.CreatedDate = new Date();
 			user.Username = req.body.username;
 
-			if (user.Email === 'sam@intravenous.coffee' || user.Email === 'elise_t92@hotmail.com') {
-				user.Access = 'Admin';
-			} else {
+			if (!user.Email === 'sam@intravenous.coffee' && !user.Email === 'elise_t92@hotmail.com') {
 				user.Access = 'User';
+			} else {
+				user.Access = 'Admin';
 			}
 
 			user.save(function(err) {
