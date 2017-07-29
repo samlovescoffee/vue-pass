@@ -11,7 +11,7 @@ const user = {
 			newUser.Email = req.body.email;
 			newUser.Password = passwordHash.generate(req.body.password);
 			newUser.CreatedDate = new Date();
-			newUser.Username = req.body.Username;
+			newUser.Username = req.body.username;
 
 			if (!['sam@intravenous.coffee', 'elise_t92@hotmail.com'].includes(newUser.Email)) {
 				newUser.Access = 'User';
