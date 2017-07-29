@@ -33,7 +33,7 @@ export default {
 				searchTerm: window.debug ? "sam" : "",
 			},
 			resultData: {
-				count: 'No results',
+				count: 'No Results',
 				content: []
 			}
 		}
@@ -47,12 +47,8 @@ export default {
 				{headers: {"Content-Type": "application/x-www-form-urlencoded"}},)
 				.then(function(res) {
 					//TODO: Use the JWT node package
-					self.resultData.count = Object.keys(res.data).length;
-					let userArr = [];
-					for(let i = 0; i < Object.values(res.data).length; i++) {
-						userArr.push(Object.values(res.data)[i].Email);
-					}
-					self.resultData.content = userArr;
+					self.resultData.count = res.data.length === 0 ? 'No Results' : 'Returned ' + res.data.length + 'Results';
+					self.resultData.content = res.data;
 				})
 				.catch(function (error) {
 					console.log(error);

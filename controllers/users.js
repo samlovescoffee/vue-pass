@@ -6,30 +6,28 @@ const mongoose = require('mongoose');
 let users = mongoose.model('User','users');
 
 const user = {
-	create: function createNewUser(req) {
-			let user = new User();
-			user.Email = req.body.email;
-			user.Password = passwordHash.generate(req.body.password);
-			user.CreatedDate = new Date();
-			user.Username = req.body.username;
+	create: function createUser(req) {
+			let newUser = new User();
+			newUser.Email = req.body.email;
+			newUser.Password = passwordHash.generate(req.body.password);
+			newUser.CreatedDate = new Date();
+			newUser.Username = req.body.Username;
 
-			if (!user.Email === 'sam@intravenous.coffee' && !user.Email === 'elise_t92@hotmail.com') {
-				user.Access = 'User';
+			if (!['sam@intravenous.coffee', 'elise_t92@hotmail.com'].includes(newUser.Email)) {
+				newUser.Access = 'User';
 			} else {
-				user.Access = 'Admin';
+				newUser.Access = 'Admin';
 			}
 
-			user.save(function(err) {
+			newUser.save(function(err) {
 				if (err) {
 					Log.error(err);
 				} else {
-					Log.audit(user.Email, 'New user created');
+					Log.audit(newUser.Email, 'New user created');
 				}
 			});
 	},
 
-	//TODO: make this a utility function to be used by handleSubmission, return data instead of sending it.
-	// return a promise instead.
 	find: function finder(col, searchTerm, res) {
 		return new Promise ((resolve, reject) => {
 			users.find({ [col]: searchTerm }, function(err, data) {
@@ -37,12 +35,7 @@ const user = {
 					Log.error(err);
 					reject(err);
 				} else {
-					let userStore = {};
-					for(let i = 0; i < data.length; i++) {
-						let name = data[i]['_doc']['_id'];
-						userStore[name] = data[i]['_doc'];
-					}
-				resolve(userStore);
+					resolve(data);
 				}
 			});
 		});
@@ -53,7 +46,7 @@ const user = {
 		.then(function(val){
 			let userArr = [];
 
-			if (Object.keys(val).length === 0) {
+			if (val.length === 0) {
 				if (Helper.validatePassword(req.body.password) && Helper.validateEmail(req.body.email)) {
 					user.create(req);
 				} else {
@@ -61,10 +54,7 @@ const user = {
 					Log.error(dangerousRequest);
 				}
 			} else {
-				for(let i = 0; i < Object.values(val).length; i++) {
-					userArr.push(Object.values(val)[i]);
-				}
-				if (passwordHash.verify(req.body.password, userArr[0].Password)) {
+				if (passwordHash.verify(req.body.password, val[0].Password)) {
 					Log.audit(req.body.email, 'Successful log in request');
 					res.status(200).end();
 				} else {
