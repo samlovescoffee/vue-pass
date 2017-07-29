@@ -3,7 +3,8 @@
 	<div class='row'>
 		<form id="access">
 			<legend><h1>{{ title }}</h1></legend>
-			<label><span>User name</span>
+
+			<label class='signUpEl'><span>User name</span>
 				<input id="username" v-model='inputData.username' name="username" type="text" text="User Name"/>
 			</label>
 
@@ -12,8 +13,14 @@
 			</label>
 
 			<label><span>Password</span>
-				<input id="password" v-model='inputData.password' name='password' type='password' value='123QWEqwe@' text="Password"/>
+				<input id="password" v-model='inputData.password' name='password' type='password' text="Password"/>
 			</label>
+
+			<label class='signUpEl'><span>Confirm Password</span>
+				<input id="password-check" v-model='inputData.passwordCheck' name='password-check' type='password' text="Password"/>
+			</label>
+
+			<span class='toggleSignUp'>{{ signUpText }}</span>
 
 			<button v-on:click='submit' value="Go">Submit</button>
 		</form>
@@ -31,11 +38,12 @@ export default {
   	name: 'signUpForm',
 	data () {
 		return {
-			title: 'Sign Up',
+			title: "Sign In",
+			signUpText: "Don't have an account?",
 			inputData: {
 				username: window.debug ? "sam" : "",
 				email: window.debug ? "sam@google.com" : "",
-				password: window.debug ? "123qweQWE@" : "",
+				password: window.debug ? "123qweQWE@" : ""
 			}
 		}
 	},
@@ -120,6 +128,13 @@ export default {
 		margin-bottom: 10px;
 		font-size: 20px;
 		padding: 5px;
+	}
+
+	.signUpEl {
+		display: none;
+	}
+	.signUpEl.active {
+		display: block;
 	}
 
 </style>

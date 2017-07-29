@@ -1,6 +1,6 @@
 <template>
 	<div class='row'>
-        <h1>Hi {{ Username }}</h1>
+        <h1 style='text-transform: capitalize'>Hi {{ Username }}</h1>
         <h3>This is the account page</h3>
 	</div>
 </template>
