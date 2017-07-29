@@ -79,31 +79,6 @@ const user = {
 		.catch(function(err){
 			Log.error(err);
 		});
-		// users.find({'Email': req.body.email}, function(err, data) {
-		// 	if (err) {
-		// 		Log.error(err);
-
-		// 	} else if (data.length === 0) {
-		// 		if (Helper.validatePassword(req.body.password) && Helper.validateEmail(req.body.email)) {
-		// 			user.create(req);
-		// 		} else {
-		// 			let dangerousRequest = 'User with email: ' + req.body.email + ' made a User post request without form validation';
-		// 			Log.error(dangerousRequest);
-		// 		}
-
-		// 	} else if (passwordHash.verify(req.body.password, data[0].Password)) {
-		// 		Log.audit(req.body.email, 'Successful log in request');
-		// 		res.status(200).end();
-		// 	} else {
-		// 		Log.audit(req.body.email, 'Unsuccessful log in');
-		// 		res.status(401).end();
-		// 	}
-
-		// 	if (typeof dangerousRequest != 'undefined') {
-		// 		Log.error(dangerousRequest);
-		// 	}
-		
-		// });
 	}
 	
 };
