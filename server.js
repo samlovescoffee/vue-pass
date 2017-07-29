@@ -36,4 +36,12 @@ API.route('/users')
 .post((req, res) => User.validate(req, res));
 
 API.route('/userSearch')
-.post((req, res) => User.find("Username", req.body.searchTerm, res));
+.post(function(req, res) {
+	User.find("Username", req.body.searchTerm, res)
+	.then(function(val){
+		res.send(val);
+	})
+	.catch(function(err){
+		Error.log(err);
+	})
+});
