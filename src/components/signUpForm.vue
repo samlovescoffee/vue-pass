@@ -60,7 +60,15 @@ export default {
 				axios.post('http://localhost:3001/api/users', querystring.stringify(this.formData),
 					{headers: {"Content-Type": "application/x-www-form-urlencoded"}},)
 					.then(function(res) {
-						//TODO: Use the JWT node package
+						//TODO: Use the JWT node packageconsole.log(res);
+						let thisUser = res.data;
+						sessionStorage.setItem(
+							'User',
+							'{"Username": "' + thisUser.Username + '"}'
+						);
+
+						
+
 						self.$router.push('/account');
 					})
 					.catch(function (error) {

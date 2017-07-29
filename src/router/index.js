@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import signUp from './signUp'
 import search from './search'
+import account from './account'
 
 Vue.use(Router)
 
@@ -18,6 +19,11 @@ export default new Router({
       path: '/search',
       name: 'search',
       component: search
+    },
+    {
+      path: '/account',
+      name: 'account',
+      component: account
     }
   ]
 })
