@@ -61,6 +61,7 @@ const user = {
 					Log.audit(req.body.email, 'Unsuccessful log in');
 					res.status(401).end();
 				}
+				// will this ever be different? Maybe just send it where it's defined
 				if (typeof dangerousRequest != 'undefined') {
 					Log.error(dangerousRequest);
 				}
