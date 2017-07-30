@@ -18,10 +18,8 @@
 </template>
 
 <script>
-
 import axios from 'axios';
 import Router from 'vue-router';
-
 let querystring = require('querystring');
 let Cookie = require('../controllers/cookies');
 
@@ -42,18 +40,17 @@ export default {
 		submit: function handleSubmit(e) {
 			e.preventDefault();
 			let self = this;
-
 			axios.post('http://localhost:3001/api/userSearch', querystring.stringify(this.formData),
 				{headers: {"Content-Type": "application/x-www-form-urlencoded"}},)
-				.then(function(res) {
-					//TODO: Use the JWT node package
-					self.resultData.count = res.data.length === 0 ? 'No Results' : 'Returned ' + res.data.length + 'Results';
-					self.resultData.content = res.data;
-					console.log(res);
-				})
-				.catch(function (error) {
-					console.log(error);
-				});
+			.then(function(res) {
+				//TODO: Use the JWT node package
+				self.resultData.count = res.data.length === 0 ? 'No Results' : 'Returned ' + res.data.length + 'Results';
+				self.resultData.content = res.data;
+				console.log(res);
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
 		}
 	},
 	computed: {

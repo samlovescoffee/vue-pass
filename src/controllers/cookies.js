@@ -5,12 +5,10 @@ const cookie = {
 		let expires = "expires="+ d.toUTCString();
 		document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 	},
-
 	read: function getCookie(name) {
 		let re = new RegExp(name + "=([^;]+)");
 		let value = re.exec(document.cookie);
 		return (value !== null) ? unescape(value[1]) : null;
 	}
 };
-
 module.exports = cookie;
