@@ -63,7 +63,7 @@ const user = {
 			let userArr = [];
 
 			if (val.length === 0) {
-				user.create(req);
+				res.status(401).send('User exists');
 			} else {
 				if (passwordHash.verify(req.body.password, val[0].Password)) {
 					Log.audit(req.body.email, 'Successful log in request');
