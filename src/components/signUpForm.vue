@@ -24,9 +24,9 @@
 <script>
 import Router from 'vue-router';
 let querystring = require('querystring');
-let Cookie = require('../controllers/cookies');
-let userController = require('../controllers/users');
-let validate = require('../controllers/validate');
+let Cookie = require('../utilities/cookies');
+let userController = require('../utilities/users');
+let validate = require('../utilities/validate');
 
 export default {
   	name: 'signUpForm',

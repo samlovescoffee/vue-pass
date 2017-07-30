@@ -21,7 +21,7 @@
 import axios from 'axios';
 import Router from 'vue-router';
 let querystring = require('querystring');
-let Cookie = require('../controllers/cookies');
+let Cookie = require('../utilities/cookies');
 
 export default {
   	name: 'searchUsers',
