@@ -6,28 +6,45 @@ const mongoose = require('mongoose');
 let users = mongoose.model('User','users');
 
 const user = {
-	create: function createUser(req) {
-			let newUser = new User();
-			newUser.Email = req.body.email;
-			newUser.Password = passwordHash.generate(req.body.password);
-			newUser.CreatedDate = new Date();
-			newUser.Username = req.body.username;
-
-			if (!['sam@intravenous.coffee', 'elise_t92@hotmail.com'].includes(newUser.Email)) {
-				newUser.Access = 'User';
-			} else {
-				newUser.Access = 'Admin';
-			}
-
-			newUser.save(function(err) {
-				if (err) {
-					Log.error(err);
-				} else {
-					Log.audit(newUser.Email, 'New user created');
-				}
-			});
+	signUpCheck: function(req) {
+		if(req.body.signUp === "true") {
+			return true;
+		} else {
+			return false;
+		}
 	},
+	create: function createUser(req) {
+		user.find('Email', req.body.email)
+		.then(function(val){
+			if (val.length === 0 && Helper.validatePassword(req.body.password) && Helper.validateEmail(req.body.email)) {
+				let newUser = new User();
+				newUser.Email = req.body.email;
+				newUser.Password = passwordHash.generate(req.body.password);
+				newUser.CreatedDate = new Date();
+				newUser.Username = req.body.username;
 
+				if (!['sam@intravenous.coffee', 'elise_t92@hotmail.com'].includes(newUser.Email)) {
+					newUser.Access = 'User';
+				} else {
+					newUser.Access = 'Admin';
+				}
+
+				newUser.save(function(err) {
+					if (err) {
+						Log.error(err);
+					} else {
+						Log.audit(newUser.Email, 'New user created');
+					}
+				});
+			} else {
+				let dangerousRequest = 'User with email: ' + req.body.email + ' made a User post request without form validation, or tried to sign up using existing credentials';
+				Log.error(dangerousRequest);
+			}
+		})
+		.catch(function(error){
+			Log.error(error);
+		})
+	},
 	find: function finder(col, searchTerm, res) {
 		return new Promise ((resolve, reject) => {
 			users.find({ [col]: searchTerm }, function(err, data) {
@@ -40,19 +57,13 @@ const user = {
 			});
 		});
 	},
-
 	validate: function handleSubmission(req, res) {
 		user.find('Email', req.body.email)
 		.then(function(val){
 			let userArr = [];
 
 			if (val.length === 0) {
-				if (Helper.validatePassword(req.body.password) && Helper.validateEmail(req.body.email)) {
-					user.create(req);
-				} else {
-					let dangerousRequest = 'User with email: ' + req.body.email + ' made a User post request without form validation';
-					Log.error(dangerousRequest);
-				}
+				user.create(req);
 			} else {
 				if (passwordHash.verify(req.body.password, val[0].Password)) {
 					Log.audit(req.body.email, 'Successful log in request');

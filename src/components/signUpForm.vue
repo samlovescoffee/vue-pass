@@ -63,7 +63,7 @@ export default {
 	},
 	computed: {
 		formData: function() {
-			return {username:this.inputData.username, email: this.inputData.email, password: this.inputData.password};
+			return {username:this.inputData.username, email: this.inputData.email, password: this.inputData.password, signUp: this.signUp};
 		}
 	}
 }

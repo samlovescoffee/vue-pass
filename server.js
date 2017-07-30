@@ -33,7 +33,13 @@ app.listen(3001, function() {
 });
 
 API.route('/users')
-.post((req, res) => User.validate(req, res));
+.post(function(req, res) {
+	if (User.signUpCheck(req)) {
+		User.create(req);
+	} else {
+		User.validate(req, res);
+	}
+});
 
 API.route('/userSearch')
 .post(function(req, res) {
