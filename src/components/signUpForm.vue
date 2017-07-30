@@ -4,7 +4,7 @@
 		<form id="access">
 			<legend><h1>{{ title }}</h1></legend>
 
-			<label class='signUpEl'><span>User name</span>
+			<label v-if="signUp"><span>User name</span>
 				<input id="username" v-model='inputData.username' name="username" type="text" text="User Name"/>
 			</label>
 
@@ -16,11 +16,11 @@
 				<input id="password" v-model='inputData.password' name='password' type='password' text="Password"/>
 			</label>
 
-			<label class='signUpEl'><span>Confirm Password</span>
-				<input id="password-check" v-model='inputData.passwordCheck' name='password-check' type='password' text="Password"/>
+			<label v-if="signUp"><span>Confirm Password</span>
+				<input id="passwordCheck" v-model='inputData.passwordCheck' name='passwordCheck' type='password' text="Password"/>
 			</label>
 
-			<span class='toggleSignUp'>{{ signUpText }}</span>
+			<span v-on:click='toggleSignUp'>{{ signUpText }}</span>
 
 			<button v-on:click='submit' value="Go">Submit</button>
 		</form>
@@ -38,12 +38,16 @@ export default {
   	name: 'signUpForm',
 	data () {
 		return {
-			title: "Sign In",
-			signUpText: "Don't have an account?",
+			signUp: false,
+
+			// text doesn't seem to pay attention
+			signUpText: this.signUp ? "Don't have an account?" : "Already have an account?",
+			title: this.signUp ? "Sign In" : "Sign Up",
 			inputData: {
 				username: window.debug ? "sam" : "",
 				email: window.debug ? "sam@google.com" : "",
-				password: window.debug ? "123qweQWE@" : ""
+				password: window.debug ? "123qweQWE@" : "",
+				passwordCheck: window.debug ? "123qweQWE@" : ""
 			}
 		}
 	},
@@ -95,11 +99,14 @@ export default {
 			} else if (!validatePassword(this.formData.password)) {
 				alert('Password must be 8 characters, numbers and include upper and lower case letters');
 			}
+		},
+		toggleSignUp: function() {
+			this.signUp = !this.signUp;
 		}
 	},
 	computed: {
 		formData: function() {
-			return {username: this.inputData.username, email: this.inputData.email, password: this.inputData.password};
+			return {username:this.inputData.username, email: this.inputData.email, password: this.inputData.password};
 		}
 	}
 }
