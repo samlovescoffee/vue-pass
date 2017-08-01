@@ -44,7 +44,8 @@ export default {
 				{headers: {"Content-Type": "application/x-www-form-urlencoded"}},)
 			.then(function(res) {
 				//TODO: Use the JWT node package
-				self.resultData.count = res.data.length === 0 ? 'No Results' : 'Returned ' + res.data.length + 'Results';
+				console.log(res.data);
+				self.resultData.count = res.data.length === 0 ? 'No Results' : 'Returned ' + res.data.length + 'Result(s)';
 				self.resultData.content = res.data;
 			})
 			.catch(function (error) {

@@ -50,7 +50,7 @@ export default {
 			// preserve this to access $router
 			let self = this;
 			if (validate.Email(this.formData.email) && validate.Password(this.formData.password)) {
-			userController.postUsers(querystring.stringify(this.formData), self);
+				userController.postUsers(querystring.stringify(this.formData), self);
 			} else if (!validate.Email(this.formData.email)) {
 				alert('Invalid email address');
 			} else if (!validate.Password(this.formData.password)) {

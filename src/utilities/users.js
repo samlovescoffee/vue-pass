@@ -6,7 +6,7 @@ const userController = {
         {headers: {"Content-Type": "application/x-www-form-urlencoded"}},)
         .then(function(res) {
             //TODO: Use the JWT node packageconsole.log(res);
-            let thisUser = res.data;
+            let thisUser = res.data[0];
             sessionStorage.setItem(
                 'User',
                 '{"Username": "' + thisUser.Username + '"}'
@@ -14,18 +14,14 @@ const userController = {
             self.$router.push('/account');
         })
         .catch(function (error) {
-            if (error.response.status != 'undefined') {
-                switch (error.response.status) {
-                    case 401:
-                        alert('Incorrect Credentials');
-                        break;
-                    default:
-                        console.log(error);
-                        break;
-                }
-            } else {
-                console.log(error);
-            }  
+            switch (error.response.status) {
+                case 401:
+                    alert('Incorrect Credentials');
+                    break;
+                default:
+                    console.log(error);
+                    break;
+            }
         });
     }
 };

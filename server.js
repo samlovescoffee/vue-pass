@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const API = express.Router();
 let User = require('./controllers/users');
+let Log = require('./controllers/logs');
 
 //now we should configure the API to use bodyParser and look for JSON data in the request body
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -35,9 +36,25 @@ app.listen(3001, function() {
 API.route('/users')
 .post(function(req, res) {
 	if (User.signUpCheck(req)) {
-		User.create(req);
+		User.create(req, res)
+		.then(function(val){
+			res.status(200).send(val);
+		})
+		.catch(function(err){
+			Log.error(err);
+		})
 	} else {
-		User.validate(req, res);
+		User.validate(req, res)
+		.then(function(val){
+			if (typeof val == 'object') {
+				res.status(200).send(val);
+			} else {
+				res.status(401).send(val);
+			}
+		})
+		.catch(function(err){
+			Log.error(err);
+		});
 	}
 });
 
@@ -48,6 +65,6 @@ API.route('/userSearch')
 		res.send(val);
 	})
 	.catch(function(err){
-		Error.log(err);
+		Log.error(err);
 	})
 });
