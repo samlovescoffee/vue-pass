@@ -26,6 +26,7 @@ button {
 	font-size: 15px;
 	cursor: pointer;
 	transition: all 0.4s;
+	box-shadow: 0px 0px 10px -2px #929292;
 }
 button:hover {
 	background: rgba(0, 0, 0, 0);

@@ -20,6 +20,11 @@
 			<span v-on:click='toggleSignUp'>{{ formSwap }}</span>
 			<button v-on:click='submit' value="Go">Submit</button>
 		</form>
+		<div v-if="warning" class="warning">
+			<div v-if="error" class='tag'></div>
+			<div v-else class='tag tagRed'></div>
+			<p>{{ warningText }}</p>
+		</div>
 	</div>
 </template>
 
@@ -40,7 +45,10 @@ export default {
 				email: window.debug ? "sam@google.com" : "",
 				password: window.debug ? "123qweQWE@" : "",
 				passwordCheck: window.debug ? "123qweQWE@" : ""
-			}
+			},
+			warningText: "",
+			warning: false,
+			error: false
 		}
 	},
   	methods: {
@@ -51,9 +59,13 @@ export default {
 			if (validate.Email(this.formData.email) && validate.Password(this.formData.password)) {
 				userController.postUsers(querystring.stringify(this.formData), self);
 			} else if (!validate.Email(this.formData.email)) {
-				alert('Invalid email address');
+				this.warningText = 'Invalid email address';
+				this.warning = true;
+				this.error = false;
 			} else if (!validate.Password(this.formData.password)) {
-				alert('Password must be 8 characters, numbers and include upper and lower case letters');
+				this.warningText = 'Passwords must be 8 characters long, including numbers, upper case letters and lower case letters';
+				this.warning = true;
+				this.error = false;
 			}
 		},
 		toggleSignUp: function() {
@@ -65,40 +77,73 @@ export default {
 			return {username:this.inputData.username, email: this.inputData.email, password: this.inputData.password, signUp: this.signUp};
 		},
 		formSwap: function() {
-			return this.signUp ? "Don't have an account?" : "Already have an account?";
+			return this.signUp ? "Already have an account?" : "Don't have an account?";
 		},
 		formTitle: function() {
-			return this.signUp ? "Sign In" : "Sign Up";
+			return this.signUp ? "Sign Up" : "Sign In";
 		}
 	}
 }
 </script>
 
 <style scoped>
+	@keyframes fadeIn {
+		from {opacity: 0; margin-top: 20px;}
+		to {opacity: 1;  margin-top: 10px;}
+	}
+
 	form {
 		padding: 50px;
 		width: 450px;
 		max-width: 90% !important;
 		margin: auto;
 		margin-top: 200px;
-		box-shadow: 0px 0px 10px -2px;
+		box-shadow: 0px 0px 10px -2px #929292;
+		border: solid 1px #b7b7b7;
 		background: white;
 	}
 	span {
 		display: block;
-		margin-bottom: 5px;
+		margin-bottom: 15px;
 		font-size: 15px;
+	}
+	label span {
+		margin-bottom: 5px;
 	}
 	input {
 		width: 100%;
-		margin-bottom: 10px;
+		margin-bottom: 15px;
 		font-size: 20px;
 		padding: 5px;
 	}
-	.signUpEl {
-		display: none;
+	.warning {
+		background: white;
+		padding: 20px 50px;
+		width: 450px;
+		box-shadow: 0px 0px 10px -2px #929292;
+		border: solid 1px #b7b7b7;
+		margin: auto;
+		margin-top: 10px;
+		animation-name: fadeIn;
+    	animation-duration: 0.4s;
+		overflow: hidden;
+		position: relative;
 	}
-	.signUpEl.active {
-		display: block;
+	
+	.warning p {
+		margin-bottom: 0;
+	}
+
+	.warning .tag {
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 3px;
+		height: 100%;
+		background: orange;
+	}
+
+	.warning .tagRed {
+		background: red;
 	}
 </style>

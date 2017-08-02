@@ -16,9 +16,13 @@ const userController = {
         .catch(function (error) {
             switch (error.response.status) {
                 case 401:
-                    alert('Incorrect Credentials');
+                    self.warning = true;
+                    self.warningText = "Incorrect login details";
+                    self.error = true;
                     break;
                 default:
+                    self.warningText = "Undefined error";
+                    self.error = true;
                     console.log(error);
                     break;
             }
