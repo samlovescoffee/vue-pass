@@ -2,8 +2,9 @@
 <template>
 	<div class='row'>
 		<form id="access">
-			<legend><h1>{{ title }}</h1></legend>
+			<legend><h1>{{ formTitle }}</h1></legend>
 			<label v-if="signUp"><span>User name</span>
+				<!--TODO: ajax check this on delay after keyup-->
 				<input id="username" v-model='inputData.username' name="username" type="text" text="User Name"/>
 			</label>
 			<label><span>Email</span>
@@ -12,10 +13,11 @@
 			<label><span>Password</span>
 				<input id="password" v-model='inputData.password' name='password' type='password' text="Password"/>
 			</label>
+			<!--TODO: this isn't validated at present-->
 			<label v-if="signUp"><span>Confirm Password</span>
 				<input id="passwordCheck" v-model='inputData.passwordCheck' name='passwordCheck' type='password' text="Password"/>
 			</label>
-			<span v-on:click='toggleSignUp'>{{ signUpText }}</span>
+			<span v-on:click='toggleSignUp'>{{ formSwap }}</span>
 			<button v-on:click='submit' value="Go">Submit</button>
 		</form>
 	</div>
@@ -33,9 +35,6 @@ export default {
 	data () {
 		return {
 			signUp: false,
-			// text doesn't seem to pay attention
-			signUpText: this.signUp ? "Don't have an account?" : "Already have an account?",
-			title: this.signUp ? "Sign In" : "Sign Up",
 			inputData: {
 				username: window.debug ? "sam" : "",
 				email: window.debug ? "sam@google.com" : "",
@@ -64,6 +63,12 @@ export default {
 	computed: {
 		formData: function() {
 			return {username:this.inputData.username, email: this.inputData.email, password: this.inputData.password, signUp: this.signUp};
+		},
+		formSwap: function() {
+			return this.signUp ? "Don't have an account?" : "Already have an account?";
+		},
+		formTitle: function() {
+			return this.signUp ? "Sign In" : "Sign Up";
 		}
 	}
 }
