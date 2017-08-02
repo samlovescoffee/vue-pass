@@ -21,8 +21,8 @@
 			<button v-on:click='submit' value="Go">Submit</button>
 		</form>
 		<div v-if="warning" class="warning">
-			<div v-if="error" class='tag'></div>
-			<div v-else class='tag tagRed'></div>
+			<div v-if="error" class='tag tagRed'></div>
+			<div v-else class='tag'></div>
 			<p>{{ warningText }}</p>
 		</div>
 	</div>
@@ -91,7 +91,6 @@ export default {
 		from {opacity: 0; margin-top: 20px;}
 		to {opacity: 1;  margin-top: 10px;}
 	}
-
 	form {
 		padding: 50px;
 		width: 450px;
@@ -129,11 +128,9 @@ export default {
 		overflow: hidden;
 		position: relative;
 	}
-	
 	.warning p {
 		margin-bottom: 0;
 	}
-
 	.warning .tag {
 		position: absolute;
 		top: 0;
@@ -142,7 +139,6 @@ export default {
 		height: 100%;
 		background: orange;
 	}
-
 	.warning .tagRed {
 		background: red;
 	}
