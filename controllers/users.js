@@ -71,7 +71,7 @@ const user = {
 			user.find('Email', req.body.email)
 			.then(function(val){
 				if (val.length === 0) {
-					resolve('User exists');
+					resolve('User does not exist');
 				} else {
 					if (passwordHash.verify(req.body.password, val[0].Password)) {
 						Log.audit(req.body.email, 'Successful log in request');
