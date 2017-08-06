@@ -5,7 +5,6 @@ const userController = {
 	postUsers: function signInPost(data, self) {
         let JWT = cookies.read("JWT");
         if (JWT == null) JWT = false;
-        ;
         axios.post('http://localhost:3001/api/users', data,
         {headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -23,7 +22,6 @@ const userController = {
         });
     },
     storeJWT: function(string) {
-        ;
         cookies.write('JWT', string.data, 2);
     }
 };
