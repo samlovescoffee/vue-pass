@@ -46,9 +46,7 @@ const user = {
 						Log.error(err);
 					});
 				} else {
-					let dangerousRequest = 'User with email: ' + req.body.email + ' made a User post request without form validation, or tried to sign up using existing credentials';
-					Log.error(dangerousRequest);
-					reject(dangerousRequest);
+					reject('User with this email may already exist');
 				}
 			})
 			.catch(function(error){

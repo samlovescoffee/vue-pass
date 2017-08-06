@@ -42,6 +42,12 @@ API.route('/users')
 		})
 		.catch(function(err){
 			Log.error(err);
+			if (err = 'User with this Email may already exist') {
+				res.status(405).send(err);
+			} else {
+				res.status(500).send('Internal server error');
+			}
+			
 		})
 	} else {
 		User.validate(req, res)
@@ -54,6 +60,7 @@ API.route('/users')
 		})
 		.catch(function(err){
 			Log.error(err);
+			res.status(500).send('Internal Server Error');
 		});
 	}
 });
@@ -66,5 +73,6 @@ API.route('/userSearch')
 	})
 	.catch(function(err){
 		Log.error(err);
+		res.status(500).send('Internal Server Error');
 	})
 });
