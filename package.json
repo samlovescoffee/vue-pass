@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.16.2",
     "body-parser": "^1.17.2",
+    "cors": "^2.8.4",
     "mongoose": "4.10.8",
     "password-hash": "^1.2.2",
     "vue": "^2.4.1",

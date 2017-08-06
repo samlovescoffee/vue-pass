@@ -9,32 +9,26 @@ const router = express.Router();
 let User = require('./controllers/users');
 let Log = require('./controllers/logs');
 let helper = require('./controllers/helper');
-
-//now we should configure the API to use bodyParser and look for JSON data in the request body
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-//To prevent errors from Cross Origin Resource Sharing
-app.use(function(req, res, next) {
-	res.setHeader('Access-Control-Allow-Origin', '*');
-	res.setHeader('Access-Control-Allow-Credentials', 'true');
-	res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
-	res.setHeader('Access-Control-Allow-Headers', 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers');
-	//and remove caching so we get the most recent users
-	res.setHeader('Cache-Control', 'no-cache');
-	next();
-});
+const cors = require('cors')
 
 // change this to your db
 mongoose.connect('mongodb://localhost/vue-pass');
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use('/api', cors(), router);
+app.options('*', cors());
+
 // Middle ware
-router.use('/', function (req, res, next) {
-  	console.log('Time:', Date.now());
+router.use(function (req, res, next) {
+	console.log('Time:', Date.now());
+	if (req.headers.jwt !== 'null') {
+		console.log('Valid');
+	} else {
+		console.log('Invalid');
+	}
   	next();
 });
-
-app.use('/api', router);
 
 app.listen(3001, function() {
 	console.log('api running');
