@@ -8,6 +8,7 @@ const app = express();
 const router = express.Router();
 let User = require('./controllers/users');
 let Log = require('./controllers/logs');
+let helper = require('./controllers/helper');
 
 //now we should configure the API to use bodyParser and look for JSON data in the request body
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -44,7 +45,9 @@ router.route('/users')
 	if (User.signUpCheck(req)) {
 		User.create(req, res)
 		.then(function(val){
-			res.status(200).send(val);
+			//res.status(200).send(val);
+			let newJWT = helper.createJWT(val[0]);
+			res.status(200).send(newJWT);
 		})
 		.catch(function(err){
 			Log.error(err);
@@ -59,7 +62,9 @@ router.route('/users')
 		User.validate(req, res)
 		.then(function(val){
 			if (typeof val == 'object') {
-				res.status(200).send(val);
+				//res.status(200).send(val);
+				let newJWT = helper.createJWT(val[0]);
+				res.status(200).send(newJWT);
 			} else {
 				res.status(401).send(val);
 			}

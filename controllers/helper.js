@@ -8,6 +8,19 @@ const helper = {
 	validateEmail: function checkPasswordRegex(email) {
 			let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 			return re.test(email);
+	},
+	createJWT: function(user) {
+		let days = 1;
+		let tomorrow = new Date(Date.now() + days*24*60*60*1000);
+		
+		let payload = {
+			name: user.Username,
+			access: user.Access,
+			expires: tomorrow
+		};
+		let encoded = new Buffer(JSON.stringify(payload)).toString('base64');
+		let hashed = passwordHash.generate(JSON.stringify(payload));
+		return JSON.stringify(encoded) + "." + hashed;
 	}
 }
 
