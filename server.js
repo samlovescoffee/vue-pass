@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const bodyParser = require('body-parser');
 const app = express();
-const API = express.Router();
+const router = express.Router();
 let User = require('./controllers/users');
 let Log = require('./controllers/logs');
 
@@ -27,13 +27,19 @@ app.use(function(req, res, next) {
 // change this to your db
 mongoose.connect('mongodb://localhost/vue-pass');
 
-app.use('/api', API);
+// Middle ware
+router.use('/', function (req, res, next) {
+  	console.log('Time:', Date.now());
+  	next();
+});
+
+app.use('/api', router);
 
 app.listen(3001, function() {
 	console.log('api running');
 });
 
-API.route('/users')
+router.route('/users')
 .post(function(req, res) {
 	if (User.signUpCheck(req)) {
 		User.create(req, res)
@@ -65,7 +71,7 @@ API.route('/users')
 	}
 });
 
-API.route('/userSearch')
+router.route('/userSearch')
 .post(function(req, res) {
 	User.find("Username", req.body.searchTerm, res)
 	.then(function(val){
