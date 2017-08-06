@@ -19,16 +19,15 @@ app.use('/api', cors(), router);
 app.options('*', cors());
 
 // Middle ware
+// TODO: stop this running twice
 router.use(function (req, res, next) {
-	if (req.headers.jwt !== 'null') {
+	if (req.headers.jwt !== undefined) {
 		console.log('Present');
-		if (helper.validateJWT(req.headers.jwt)) {
-			console.log('Valid');
-		} else {
-			console.log('Invalid');
+		if (!helper.validateJWT(req.headers.jwt)) {
+			res.status(400).send('Stop fucking with your JWT');
 		}
-	} else {
-		console.log('Not Present');
+	} else if (!req.headers.path === "/users") {
+		res.redirect('/users');
 	}
   	next();
 });
