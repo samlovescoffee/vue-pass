@@ -12,7 +12,6 @@ const helper = {
 	createJWT: function(user) {
 		let days = 1;
 		let tomorrow = new Date(Date.now() + days*24*60*60*1000);
-		
 		let payload = {
 			name: user.Username,
 			access: user.Access,
@@ -21,6 +20,11 @@ const helper = {
 		let encoded = new Buffer(JSON.stringify(payload)).toString('base64');
 		let hashed = passwordHash.generate(JSON.stringify(payload));
 		return JSON.stringify(encoded) + "." + hashed;
+	},
+	validateJWT: function(JWT) {
+		let arr = JWT.split('.');
+		let decoded = new Buffer(arr[0], 'base64').toString();
+		return passwordHash.verify(decoded, arr[1]);
 	}
 }
 

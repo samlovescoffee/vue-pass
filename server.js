@@ -1,15 +1,14 @@
 'use strict';
-
 const express = require('express');
 const mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
 const bodyParser = require('body-parser');
 const app = express();
 const router = express.Router();
-let User = require('./controllers/users');
-let Log = require('./controllers/logs');
-let helper = require('./controllers/helper');
-const cors = require('cors')
+const User = require('./controllers/users');
+const Log = require('./controllers/logs');
+const helper = require('./controllers/helper');
+const cors = require('cors');
+mongoose.Promise = global.Promise;
 
 // change this to your db
 mongoose.connect('mongodb://localhost/vue-pass');
@@ -21,11 +20,15 @@ app.options('*', cors());
 
 // Middle ware
 router.use(function (req, res, next) {
-	console.log('Time:', Date.now());
 	if (req.headers.jwt !== 'null') {
-		console.log('Valid');
+		console.log('Present');
+		if (helper.validateJWT(req.headers.jwt)) {
+			console.log('Valid');
+		} else {
+			console.log('Invalid');
+		}
 	} else {
-		console.log('Invalid');
+		console.log('Not Present');
 	}
   	next();
 });

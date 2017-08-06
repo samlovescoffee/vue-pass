@@ -15,7 +15,6 @@ const userController = {
             self.$router.push('/account');
         })
         .catch(function (error) {
-            
             self.warning = true;
             self.warningText = error.response.data;
             self.error = true;
