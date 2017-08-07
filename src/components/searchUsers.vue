@@ -49,7 +49,6 @@ export default {
 				}},)
 			.then(function(res) {
 				//TODO: Use the JWT node package
-				console.log(res.data);
 				self.resultData.count = res.data.length === 0 ? 'No Results' : 'Returned ' + res.data.length + 'Result(s)';
 				self.resultData.content = res.data;
 			})
