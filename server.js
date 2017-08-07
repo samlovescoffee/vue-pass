@@ -21,13 +21,13 @@ app.options('*', cors());
 // Middle ware
 // TODO: stop this running twice
 router.use(function (req, res, next) {
-	if (req.headers.jwt !== undefined) {
+	if (req.headers.jwt !== "null" && req.headers.jwt !== undefined) {
 		console.log('Present');
 		if (!helper.validateJWT(req.headers.jwt)) {
-			res.status(400).send('Stop fucking with your JWT');
+			return res.status(400).send("Clear your cookies");
 		}
-	} else if (!req.headers.path === "/users") {
-		res.redirect('/users');
+	} else if (req.path !== "/users") {
+		return next(res.redirect("/"));
 	}
   	next();
 });

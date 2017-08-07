@@ -21,7 +21,7 @@
 import axios from 'axios';
 import Router from 'vue-router';
 let querystring = require('querystring');
-let Cookie = require('../utilities/cookies');
+let cookies = require('../utilities/cookies');
 
 export default {
   	name: 'searchUsers',
@@ -39,9 +39,14 @@ export default {
 	methods: {
 		submit: function handleSubmit(e) {
 			e.preventDefault();
+			let JWT = cookies.read("JWT");
+        	if (JWT == null) JWT = false;
 			let self = this;
 			axios.post('http://localhost:3001/api/userSearch', querystring.stringify(this.formData),
-				{headers: {"Content-Type": "application/x-www-form-urlencoded"}},)
+				{headers: {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"JWT": JWT ? JWT : 'null'
+				}},)
 			.then(function(res) {
 				//TODO: Use the JWT node package
 				console.log(res.data);
