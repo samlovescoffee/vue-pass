@@ -1,74 +1,86 @@
 'use strict';
-
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
 const router = express.Router();
-const port = process.env.API_PORT || 3001;
-let passwordHash = require('password-hash');
-let Log = require('./controllers/logs');
-let User = require('./controllers/users');
-let users = mongoose.model('User','users');
-
-//now we should configure the API to use bodyParser and look for JSON data in the request body
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-//To prevent errors from Cross Origin Resource Sharing
-app.use(function(req, res, next) {
-	res.setHeader('Access-Control-Allow-Origin', '*');
-	res.setHeader('Access-Control-Allow-Credentials', 'true');
-	res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
-	res.setHeader('Access-Control-Allow-Headers', 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers');
-	//and remove caching so we get the most recent users
-	res.setHeader('Cache-Control', 'no-cache');
-	next();
-});
+const User = require('./controllers/users');
+const Log = require('./controllers/logs');
+const helper = require('./controllers/helper');
+const cors = require('cors');
+mongoose.Promise = global.Promise;
 
 // change this to your db
 mongoose.connect('mongodb://localhost/vue-pass');
 
-router.get('/', function(req, res) {
-	res.json({ message: 'API Initialized!'});
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.options('*', cors());
+
+// Middle ware
+router.use(function (req, res, next) {
+	if (req.headers.jwt !== "null" && req.headers.jwt !== undefined) {
+		if (!helper.validateJWT(req.headers.jwt)) {
+			res.status(401).send("Clear your cookies");
+			return;
+		}
+	} else if (req.path !== "/users") {
+		res.status(401).send('No JWT');
+		return;
+	}
+  	next();
 });
-
-app.use('/api', router);
-
-app.listen(port, function() {
-	console.log('api running on port ', port);
-});
-
-let currentUsers = {
-
-};
 
 router.route('/users')
 .post(function(req, res) {
-	// handle user sign in/sign up
-	users.find({'Email': req.body.email}, function(err, data) {
-		if (err) {
+	if (User.signUpCheck(req)) {
+		User.create(req, res)
+		.then(function(val){
+			//res.status(200).send(val);
+			let newJWT = helper.createJWT(val[0]);
+			res.status(200).send(newJWT);
+		})
+		.catch(function(err){
 			Log.error(err);
-
-		} else if (data.length === 0) {
-			if (User.validatePassword(req.body.password) && User.validateEmail(req.body.email)) {
-				User.create(req);
+			if (err = 'User with this Email may already exist') {
+				res.status(405).send(err);
 			} else {
-				let dangerousRequest = 'User with email: ' + req.body.email + ' made a User post request without form validation';
-				Log.error(dangerousRequest);
+				res.status(500).send('Internal server error');
 			}
-
-		} else if (passwordHash.verify(req.body.password, data[0].Password)) {
-			Log.audit(req.body.email, 'Successful log in request');
-			res.send('{ "user": "' + data[0].Email + '", "access": "' + data[0].Access + '", "username": "' + data[0].Username + '" }:' + passwordHash.generate('{ "user": "' + data[0].Email + '", "access": "' + data[0].Access + '", "username": "' + data[0].Username + '" }'));
-
-		} else {
-			Log.audit(req.body.email, 'Unsuccessful log in');
-		}
-
-	if (typeof dangerousRequest != 'undefined') {
-		Log.error(dangerousRequest);
+			
+		})
+	} else {
+		User.validate(req, res)
+		.then(function(val){
+			if (typeof val == 'object') {
+				//res.status(200).send(val);
+				let newJWT = helper.createJWT(val[0]);
+				res.status(200).send(newJWT);
+			} else {
+				res.status(401).send(val);
+			}
+		})
+		.catch(function(err){
+			Log.error(err);
+			res.status(500).send('Internal Server Error');
+		});
 	}
-	
-	});
+});
+
+router.route('/userSearch')
+.post(function(req, res) {
+	User.find("Username", req.body.searchTerm, res)
+	.then(function(val){
+		res.send(val);
+	})
+	.catch(function(err){
+		Log.error(err);
+		res.status(500).send('Internal Server Error');
+	})
+});
+
+app.use('/api', cors(), router);
+
+app.listen(3001, function() {
+	console.log('api running');
 });

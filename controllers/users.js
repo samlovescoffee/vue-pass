@@ -1,38 +1,92 @@
 let User = require('../model/users');
 let passwordHash = require('password-hash');
 let Log = require('./logs');
+let Helper = require('./helper');
+const mongoose = require('mongoose');
+let users = mongoose.model('User','users');
 
 const user = {
-	create: function createNewUser(req) {
-			let user = new User();
-			user.Email = req.body.email;
-			console.log(req.body.password);
-			user.Password = passwordHash.generate(req.body.password);
-			user.CreatedDate = new Date();
-			user.Username = req.body.username;
+	signUpCheck: function(req) {
+		if(req.body.signUp === "true") {
+			return true;
+		} else {
+			return false;
+		}
+	},
+	create: function createUser(req, res) {
+		return new Promise ((resolve, reject) => {
+			user.find('Email', req.body.email)
+			.then(function(val, res){
+				if (val.length === 0 && Helper.validatePassword(req.body.password) && Helper.validateEmail(req.body.email)) {
+					let newUser = new User();
+					newUser.Email = req.body.email;
+					newUser.Password = passwordHash.generate(req.body.password);
+					newUser.CreatedDate = new Date();
+					newUser.Username = req.body.username;
 
-			if (user.Email === 'sam@intravenous.coffee' || user.Email === 'elise_t92@hotmail.com') {
-				user.Access = 'Admin';
-			} else {
-				user.Access = 'User';
-			}
+					if (!['sam@intravenous.coffee', 'elise_t92@hotmail.com'].includes(newUser.Email)) {
+						newUser.Access = 'User';
+					} else {
+						newUser.Access = 'Admin';
+					}
 
-			user.save(function(err) {
-				if (err) {
-					Log.error(err);
+					newUser.save(function(err) {
+						if (err) {
+							Log.error(err);
+							reject(err);
+						} else {
+							Log.audit(newUser.Email, 'New user created');
+						}
+					})
+					.then(function(val){
+						resolve(user.find('Email', req.body.email));
+						Log.audit('Successful sign up with email: ' + req.body.email);
+					})
+					.catch(function(err){
+						Log.error(err);
+					});
 				} else {
-					Log.audit(user.Email, 'New user created');
+					reject('User with this email may already exist');
+				}
+			})
+			.catch(function(error){
+				Log.error(error);
+			});
+		});
+	},
+	find: function finder(col, searchTerm, res) {
+		return new Promise ((resolve, reject) => {
+			users.find({ [col]: searchTerm }, function(err, data) {
+				if(err) {
+					Log.error(err);
+					reject(err);
+				} else {
+					resolve(data);
 				}
 			});
+		});
 	},
-
-	validatePassword: function checkPasswordRegex(password) {
-			let re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
-			return re.test(password);
-	},
-	validateEmail: function checkPasswordRegex(email) {
-			let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-			return re.test(email);
+	validate: function handleSubmission(req, res) {
+		return new Promise ((resolve, reject) => {
+			user.find('Email', req.body.email)
+			.then(function(val){
+				if (val.length === 0) {
+					resolve('User does not exist');
+				} else {
+					if (passwordHash.verify(req.body.password, val[0].Password)) {
+						Log.audit(req.body.email, 'Successful log in request');
+						resolve(val);
+					} else {
+						Log.audit(req.body.email, 'Unsuccessful log in');
+						resolve('Unsuccessful log in')
+					}
+				}
+			})
+			.catch(function(err){
+				reject(err);
+				Log.error(err);
+			});
+		});
 	}
 	
 };

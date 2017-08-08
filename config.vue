@@ -1,3 +1,3 @@
 <script>
-window.debug = true;
+    window.debug = false;
 </script>
