@@ -15,25 +15,20 @@ mongoose.connect('mongodb://localhost/vue-pass');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use('/api', cors(), router);
 app.options('*', cors());
 
 // Middle ware
-// TODO: stop this running twice
 router.use(function (req, res, next) {
 	if (req.headers.jwt !== "null" && req.headers.jwt !== undefined) {
 		if (!helper.validateJWT(req.headers.jwt)) {
-			res.status(400).send("Clear your cookies");
+			res.status(401).send("Clear your cookies");
+			return;
 		}
 	} else if (req.path !== "/users") {
-		res.redirect("localhost:8080/#");
+		res.status(401).send('No JWT');
 		return;
 	}
   	next();
-});
-
-app.listen(3001, function() {
-	console.log('api running');
 });
 
 router.route('/users')
@@ -82,4 +77,10 @@ router.route('/userSearch')
 		Log.error(err);
 		res.status(500).send('Internal Server Error');
 	})
+});
+
+app.use('/api', cors(), router);
+
+app.listen(3001, function() {
+	console.log('api running');
 });
