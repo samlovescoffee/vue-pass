@@ -42,13 +42,13 @@ export default {
 			let JWT = cookies.read("JWT");
         	if (JWT == null) JWT = false;
 			let self = this;
+			// TODO: lets use a generic function for all posts, then we can handle redirects effectively.
 			axios.post('http://localhost:3001/api/userSearch', querystring.stringify(this.formData),
 				{headers: {
 					"Content-Type": "application/x-www-form-urlencoded",
 					"JWT": JWT ? JWT : 'null'
 				}},)
 			.then(function(res) {
-				//TODO: Use the JWT node package
 				self.resultData.count = res.data.length === 0 ? 'No Results' : 'Returned ' + res.data.length + 'Result(s)';
 				self.resultData.content = res.data;
 			})
