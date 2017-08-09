@@ -32,7 +32,7 @@
 import Router from 'vue-router';
 let querystring = require('querystring');
 let Cookie = require('../utilities/cookies');
-let userController = require('../utilities/users');
+let hitApi = require('../utilities/api');
 let validate = require('../utilities/validate');
 
 export default {
@@ -57,7 +57,18 @@ export default {
 			// preserve this to access $router
 			let self = this;
 			if (validate.Email(this.formData.email) && validate.Password(this.formData.password)) {
-				userController.postUsers(querystring.stringify(this.formData), self);
+				hitApi.post('http://localhost:3001/api/users', querystring.stringify(this.formData))
+				.then(function(val){
+					Cookie.storeJWT(val);
+                	self.$router.push('/account');
+				})
+				.catch(function(error){
+					alert(error);
+					self.warning = true;
+					self.warningText = error.response.data;
+					self.error = true;
+				});
+
 			} else if (!validate.Email(this.formData.email)) {
 				this.warningText = 'Invalid email address';
 				this.warning = true;
