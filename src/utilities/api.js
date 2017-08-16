@@ -1,4 +1,4 @@
-let cookies = require('./cookies');
+const cookies = require('./cookies');
 const axios = require('axios');
 
 const hitApi = {
