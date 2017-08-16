@@ -4,9 +4,9 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
 const router = express.Router();
-const User = require('./controllers/users');
-const Log = require('./controllers/logs');
-const helper = require('./controllers/helper');
+const User = require('./services/users');
+const Log = require('./services/logs');
+const helper = require('./services/helper');
 const cors = require('cors');
 mongoose.Promise = global.Promise;
 
