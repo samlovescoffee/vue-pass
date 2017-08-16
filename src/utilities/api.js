@@ -6,7 +6,6 @@ const hitApi = {
         return new Promise ((resolve, reject) => {
             let JWT = cookies.read("JWT");
             if (JWT == null) JWT = false;
-            debugger;
             axios.post(path, data,
             {headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
@@ -16,9 +15,9 @@ const hitApi = {
                 resolve(res);
             })
             .catch(function (error) {
-                reject(errror);
+                reject(error);
             });
         }); 
     }
 };
-module.exports = hitApi;
+export default hitApi;

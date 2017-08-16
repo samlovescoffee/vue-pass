@@ -32,7 +32,7 @@
 import Router from 'vue-router';
 const querystring = require('querystring');
 const Cookie = require('../utilities/cookies');
-const hitApi = require('../utilities/api');
+import hitApi from '../utilities/api';
 const validate = require('../utilities/validate');
 
 export default {
@@ -63,7 +63,7 @@ export default {
                 	self.$router.push('/account');
 				})
 				.catch(function(error){
-					alert(error);
+					console.log(error);
 					self.warning = true;
 					self.warningText = error.response.data;
 					self.error = true;
