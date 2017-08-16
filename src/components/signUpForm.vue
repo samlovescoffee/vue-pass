@@ -30,10 +30,10 @@
 
 <script>
 import Router from 'vue-router';
-let querystring = require('querystring');
-let Cookie = require('../utilities/cookies');
-let hitApi = require('../utilities/api');
-let validate = require('../utilities/validate');
+const querystring = require('querystring');
+const Cookie = require('../utilities/cookies');
+const hitApi = require('../utilities/api');
+const validate = require('../utilities/validate');
 
 export default {
   	name: 'signUpForm',
