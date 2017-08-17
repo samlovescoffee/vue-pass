@@ -1,9 +1,9 @@
-let User = require('../model/users');
-let passwordHash = require('password-hash');
-let log = require('./logs');
-let helper = require('./helper');
+const User = require('../model/users');
+const passwordHash = require('password-hash');
+const log = require('./logs');
+const helper = require('./helper');
 const mongoose = require('mongoose');
-let users = mongoose.model('User','users');
+const MongooseUsers = mongoose.model('User','users');
 
 const user = {
 	signUpCheck: function(req) {
@@ -56,7 +56,7 @@ const user = {
 	},
 	find: function finder(col, searchTerm, res) {
 		return new Promise ((resolve, reject) => {
-			users.find({ [col]: searchTerm }, function(err, data) {
+			MongooseUsers.find({ [col]: searchTerm }, function(err, data) {
 				if(err) {
 					log.error(err);
 					reject(err);
