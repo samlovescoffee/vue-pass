@@ -4,8 +4,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
 const router = express.Router();
-const User = require('./services/users');
-const Log = require('./services/logs');
+const user = require('./services/users');
+const log = require('./services/logs');
 const helper = require('./services/helper');
 const cors = require('cors');
 mongoose.Promise = global.Promise;
@@ -33,15 +33,15 @@ router.use(function (req, res, next) {
 
 router.route('/users')
 .post(function(req, res) {
-	if (User.signUpCheck(req)) {
-		User.create(req, res)
+	if (user.signUpCheck(req)) {
+		user.create(req, res)
 		.then(function(val){
 			//res.status(200).send(val);
 			let newJWT = helper.createJWT(val[0]);
 			res.status(200).send(newJWT);
 		})
 		.catch(function(err){
-			Log.error(err);
+			log.error(err);
 			if (err = 'User with this Email may already exist') {
 				res.status(405).send(err);
 			} else {
@@ -50,7 +50,7 @@ router.route('/users')
 			
 		})
 	} else {
-		User.validate(req, res)
+		user.validate(req, res)
 		.then(function(val){
 			if (typeof val == 'object') {
 				//res.status(200).send(val);
@@ -61,7 +61,7 @@ router.route('/users')
 			}
 		})
 		.catch(function(err){
-			Log.error(err);
+			log.error(err);
 			res.status(500).send('Internal Server Error');
 		});
 	}
@@ -69,12 +69,12 @@ router.route('/users')
 
 router.route('/userSearch')
 .post(function(req, res) {
-	User.find("Username", req.body.searchTerm, res)
+	user.find("Username", req.body.searchTerm, res)
 	.then(function(val){
 		res.send(val);
 	})
 	.catch(function(err){
-		Log.error(err);
+		log.error(err);
 		res.status(500).send('Internal Server Error');
 	})
 });
