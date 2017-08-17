@@ -77,7 +77,7 @@ const user = {
 						log.audit(req.body.email, 'Successful log in request');
 						resolve(val);
 					} else {
-						Log.audit(req.body.email, 'Unsuccessful log in');
+						log.audit(req.body.email, 'Unsuccessful log in');
 						resolve('Unsuccessful log in')
 					}
 				}
