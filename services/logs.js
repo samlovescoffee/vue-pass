@@ -1,4 +1,4 @@
-let logs = require('../model/logs');
+const logs = require('../model/logs');
 
 const log = {
 	audit: function dbLog(email, message) {
