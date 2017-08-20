@@ -9,6 +9,7 @@ const log = require('./services/logs');
 const helper = require('./services/helper');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+const expressJwt = require('express-jwt')
 mongoose.Promise = global.Promise;
 
 // change this to your db
@@ -18,6 +19,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.options('*', cors());
 
+// middle ware
+app.use(expressJwt({ secret: 'test' }).unless({ path: ['/api/users'] }));
 // let token = jwt.sign({ foo: 'bar' }, '3i&#V}Kh%Gji');
 
 // Middle ware
@@ -54,7 +57,8 @@ router.route('/users')
 		user.validate(req, res)
 		.then(function(val){
 			if (typeof val == 'object') {
-				res.status(200).send(val);
+				let token = jwt.sign({ username: val[0].Username, access: val[0].Access }, 'test')
+				res.status(200).send(token);
 			} else {
 				res.status(401).send(val);
 			}

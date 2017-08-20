@@ -39,7 +39,6 @@ export default {
 		submit: function handleSubmit(e) {
 			e.preventDefault();
 			let self = this;
-			// TODO: lets use a generic function for all posts, then we can handle redirects effectively.
 			hitApi.post('http://localhost:3001/api/userSearch', querystring.stringify(this.formData))
 			.then(function(res) {
 				self.resultData.count = res.data.length === 0 ? 'No Results' : 'Returned ' + res.data.length + 'Result(s)';
