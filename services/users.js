@@ -75,7 +75,7 @@ const user = {
 				} else {
 					if (passwordHash.verify(req.body.password, val[0].Password)) {
 						log.audit(req.body.email, 'Successful log in request');
-						resolve(true);
+						resolve(val);
 					} else {
 						log.audit(req.body.email, 'Unsuccessful log in');
 						resolve('Unsuccessful log in')

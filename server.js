@@ -21,21 +21,6 @@ app.options('*', cors());
 
 // middle ware
 app.use(expressJwt({ secret: 'test' }).unless({ path: ['/api/users'] }));
-// let token = jwt.sign({ foo: 'bar' }, '3i&#V}Kh%Gji');
-
-// Middle ware
-// router.use(function (req, res, next) {
-// 	if (req.headers.jwt !== "null" && req.headers.jwt !== undefined) {
-// 		if (!helper.validateJWT(req.headers.jwt)) {
-// 			res.status(401).send("Clear your cookies");
-// 			return;
-// 		}
-// 	} else if (req.path !== "/users") {
-// 		res.status(401).send('No JWT');
-// 		return;
-// 	}
-//   	next();
-// });
 
 router.route('/users')
 .post(function(req, res) {
@@ -56,9 +41,12 @@ router.route('/users')
 	} else {
 		user.validate(req, res)
 		.then(function(val){
-			if (typeof val == 'object') {
-				let token = jwt.sign({ username: val[0].Username, access: val[0].Access }, 'test')
-				res.status(200).send(token);
+			if ('id' in val[0]) {
+				let token = jwt.sign({ username: val[0].Username, access: val[0].Access }, 'test');
+				let item = {
+					"JWT": token
+				}
+				res.status(200).send(item);
 			} else {
 				res.status(401).send(val);
 			}
