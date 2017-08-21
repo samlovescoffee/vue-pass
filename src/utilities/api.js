@@ -4,9 +4,11 @@ const axios = require('axios');
 const hitApi = {
 	post: function(path, data) {
         return new Promise ((resolve, reject) => {
+            let JWT = false;
             axios.post(path, data,
             {headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Authorisation": JWT ? JWT : null
             }},)
             .then(function(res) {
                 console.log(res);
