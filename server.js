@@ -8,6 +8,8 @@ const user = require('./services/users');
 const log = require('./services/logs');
 const helper = require('./services/helper');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
+const expressJwt = require('express-jwt')
 mongoose.Promise = global.Promise;
 
 // change this to your db
@@ -17,28 +19,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.options('*', cors());
 
-// Middle ware
-router.use(function (req, res, next) {
-	if (req.headers.jwt !== "null" && req.headers.jwt !== undefined) {
-		if (!helper.validateJWT(req.headers.jwt)) {
-			res.status(401).send("Clear your cookies");
-			return;
-		}
-	} else if (req.path !== "/users") {
-		res.status(401).send('No JWT');
-		return;
-	}
-  	next();
-});
+// middle ware
+app.use(expressJwt({ secret: 'test' }).unless({ path: ['/api/users'] }));
 
 router.route('/users')
 .post(function(req, res) {
 	if (user.signUpCheck(req)) {
 		user.create(req, res)
 		.then(function(val){
-			//res.status(200).send(val);
-			let newJWT = helper.createJWT(val[0]);
-			res.status(200).send(newJWT);
+			res.status(200).send(val);
 		})
 		.catch(function(err){
 			log.error(err);
@@ -52,10 +41,12 @@ router.route('/users')
 	} else {
 		user.validate(req, res)
 		.then(function(val){
-			if (typeof val == 'object') {
-				//res.status(200).send(val);
-				let newJWT = helper.createJWT(val[0]);
-				res.status(200).send(newJWT);
+			if ('id' in val[0]) {
+				let token = jwt.sign({ username: val[0].Username, access: val[0].Access }, 'test');
+				let item = {
+					"JWT": token
+				}
+				res.status(200).send(item);
 			} else {
 				res.status(401).send(val);
 			}

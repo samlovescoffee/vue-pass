@@ -59,7 +59,6 @@ export default {
 			if (validate.Email(this.formData.email) && validate.Password(this.formData.password)) {
 				hitApi.post('http://localhost:3001/api/users', querystring.stringify(this.formData))
 				.then(function(val){
-					Cookie.storeJWT(val);
                 	self.$router.push('/account');
 				})
 				.catch(function(error){

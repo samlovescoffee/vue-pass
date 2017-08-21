@@ -18,10 +18,9 @@
 </template>
 
 <script>
-import axios from 'axios';
 import Router from 'vue-router';
-let querystring = require('querystring');
-let cookies = require('../utilities/cookies');
+import hitApi from '../utilities/api';
+const querystring = require('querystring');
 
 export default {
   	name: 'searchUsers',
@@ -39,15 +38,8 @@ export default {
 	methods: {
 		submit: function handleSubmit(e) {
 			e.preventDefault();
-			let JWT = cookies.read("JWT");
-        	if (JWT == null) JWT = false;
 			let self = this;
-			// TODO: lets use a generic function for all posts, then we can handle redirects effectively.
-			axios.post('http://localhost:3001/api/userSearch', querystring.stringify(this.formData),
-				{headers: {
-					"Content-Type": "application/x-www-form-urlencoded",
-					"JWT": JWT ? JWT : 'null'
-				}},)
+			hitApi.post('http://localhost:3001/api/userSearch', querystring.stringify(this.formData))
 			.then(function(res) {
 				self.resultData.count = res.data.length === 0 ? 'No Results' : 'Returned ' + res.data.length + 'Result(s)';
 				self.resultData.content = res.data;
